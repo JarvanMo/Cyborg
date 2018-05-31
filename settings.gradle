@@ -1,0 +1,11 @@
+include ':app'
+include ':resources'
+include ':database'
+include ':base'
+include ':network'
+
+project(':app').projectDir = new File(rootDir, 'apps/app')
+project(':resources').projectDir = new File(rootDir,'common/resources')
+project(':database').projectDir = new File(rootDir,'common/database')
+project(':base').projectDir = new File(rootDir, 'common/base')
+project(':network').projectDir = new File(rootDir, 'common/network')

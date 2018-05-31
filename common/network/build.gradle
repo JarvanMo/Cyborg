@@ -1,0 +1,6 @@
+apply from: '../../scripts/library.gradle'
+
+dependencies {
+    compileOnly "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit2Version"
+    compileOnly "com.squareup.retrofit2:converter-jackson:$rootProject.ext.retrofit2Version"
+}
