@@ -21,6 +21,6 @@ project.ext {
 }
 
 project.ext {
-    applicationId = 'com.jarvanmo.modular'
+    applicationId = 'com.jarvanmo.cyborg'
 }
 
