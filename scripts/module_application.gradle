@@ -1,0 +1,189 @@
+import java.text.SimpleDateFormat
+
+
+apply plugin: 'com.android.application'
+
+apply from: "${rootProject.getRootDir().getAbsolutePath()}/scripts/urls.gradle"
+
+
+apply from: "${rootProject.getRootDir().getAbsolutePath()}/scripts/versions.gradle"
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+
+    defaultConfig {
+        applicationId rootProject.ext.applicationId
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode getVersionCode(false)
+        versionName getVersionName(true)
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    signingConfigs {
+
+        debugConfig {
+            storeFile file("${rootProject.getRootDir().getAbsolutePath()}/store/cloudvideo.jks")
+            storePassword "123456"
+            keyAlias "老年云课堂"
+            keyPassword "123456"
+        }
+
+        releaseConfig {
+            storeFile file("${rootProject.getRootDir().getAbsolutePath()}/store/cloudvideo.jks")
+            storePassword "123456"
+            keyAlias "老年云课堂"
+            keyPassword "123456"
+        }
+
+    }
+
+
+
+    buildTypes {
+        debug {
+
+            signingConfig signingConfigs.releaseConfig
+
+            buildConfigField "String", "BASE_URL", "${getBaseUrl(false)}"
+            buildConfigField "boolean", "RUN_AS_APP", "${runAsApp}"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+
+            ndk {
+                // 设置支持的SO库架构
+                abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
+            }
+        }
+
+        release {
+
+            signingConfig signingConfigs.debugConfig
+
+            buildConfigField "String", "BASE_URL", "${getBaseUrl(false)}"
+            buildConfigField "boolean", "RUN_AS_APP", "${runAsApp}"
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            ndk {
+                // 设置支持的SO库架构
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
+
+        }
+    }
+
+
+
+    flavorDimensions "branch"
+
+    productFlavors {
+
+        product {
+            applicationId defaultConfig.applicationId
+            dimension "branch"
+
+        }
+
+        dev {
+            applicationId defaultConfig.applicationId
+            dimension "branch"
+        }
+    }
+
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+
+        if (names.contains("dev") && variant.buildType.name == "release") {
+            variant.ignore = true
+        }
+    }
+
+    // rename the apk with the version name
+    // add output file sub folder by build type
+    applicationVariants.all { variant ->
+
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def apkName = variant.productFlavors[0].applicationId
+                if (apkName == null) {
+                    apkName = defaultConfig.applicationId
+                }
+
+                variant.mergedFlavor.versionCode = getVersionCode(false)
+                variant.mergedFlavor.versionName = getVersionName(false)
+
+                apkName = apkName.substring(apkName.lastIndexOf(".") + 1)
+
+                def sf = new SimpleDateFormat("yyMMddHHmm")
+                def date = new Date()
+                def time = sf.format(date)
+                apkName = apkName + "_${variant.productFlavors[0].name}_${variant.buildType.name}_${variant.versionName}"
+                apkName = apkName + "_" + time + ".apk"
+                outputFileName = apkName
+            }
+
+        }
+
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    androidTestImplementation "com.android.support.test:runner:$rootProject.ext.androidSupportTestVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoCoreVersion"
+
+    implementation project(':base')
+
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.ext.kotlinVersion"
+
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.androidSupportVersion"
+    implementation "com.android.support:support-annotations:$rootProject.ext.androidSupportVersion"
+    implementation "com.android.support:support-v4:$rootProject.ext.androidSupportVersion"
+    implementation "com.android.support:design:$rootProject.ext.androidSupportVersion"
+
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintVersion"
+
+
+}
+
+
+task('increaseVersionCode').doLast {
+    getVersionCode(true)
+    getVersionName(true)
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleProductRelease') {
+        task.dependsOn 'increaseVersionCode'
+    }
+}
+

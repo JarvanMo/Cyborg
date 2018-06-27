@@ -1,0 +1,47 @@
+
+def getVersionCode(save) {
+    def versionPropsFile = file("${rootProject.getRootDir().getAbsolutePath()}/properties/versions.properties")
+    Properties versionProps = new Properties()
+
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    def code = versionProps['VERSION_CODE'].toInteger() + 1
+    if (save) {
+        versionProps['VERSION_CODE'] = code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
+
+    return code
+}
+
+
+def getVersionName(save) {
+    def versionNamePropsFile = file("${rootProject.getRootDir().getAbsolutePath()}/properties/versions.properties")
+
+    Properties versionNameProps = new Properties()
+
+    versionNameProps.load(new FileInputStream(versionNamePropsFile))
+
+    def name1 = versionNameProps['VERSION_NAME_1']
+    def name2 = versionNameProps['VERSION_NAME_2'].toInteger()
+    def name3 = versionNameProps['VERSION_NAME_3'].toInteger() + 1
+
+    if (name3 >= 99) {
+        name2++
+        name3 = 0
+    }
+    versionNameProps['VERSION_NAME_1'] = name1
+    versionNameProps['VERSION_NAME_2'] = name2.toString()
+    versionNameProps['VERSION_NAME_3'] = name3.toString()
+
+    if (save) {
+        versionNameProps.store(versionNamePropsFile.newWriter(), null)
+    }
+
+    return name1 + '.' + name2 + '.' + name3
+}
+
+ext{
+    getVersionCode=this.&getVersionCode
+    getVersionName=this.&getVersionName
+}

@@ -1,0 +1,12 @@
+def getAppType(applicationId = rootProject.ext.applicationId){
+        switch (applicationId){
+            case "com.aaa":
+                return "\"4005\""
+            default:
+                return "\"4001\""
+        }
+}
+
+ext{
+    getAppType = this.&getAppType
+}

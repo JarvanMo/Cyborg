@@ -3,18 +3,24 @@ project.ext {
     minSdkVersion = 21
     targetSdkVersion = 27
 
+    junitVersion = '4.12'
+    androidSupportTestVersion = '1.0.2'
+    espressoCoreVersion = '3.0.2'
 
-    retrofit2Version = '2.4.0'
+
+    retrofit2Version = '2.3.0'
     androidSupportVersion = '27.1.1'
     leakCanaryVersion = '1.5'
 
     zxingVersion = '3.2.1'
     plugin_version = '2.3.2'
 
-    glideVersion = '4.7.1'
+    constraintVersion = '1.1.2'
 
+    glideVersion = '4.0.0-RC0'
 }
 
 project.ext {
-    applicationId = 'com.jarvanmo.app'
+    applicationId = 'com.cnyanglao.cloudvideo'
 }
+

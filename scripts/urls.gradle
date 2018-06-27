@@ -1,0 +1,11 @@
+static def getBaseUrl(release){
+   return  release ? "\"https://hello.com/\"":"\"https://hello.com/\""
+
+}
+
+
+
+
+ext{
+    getBaseUrl= this.&getBaseUrl
+}

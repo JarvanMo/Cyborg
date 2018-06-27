@@ -13,6 +13,7 @@ android {
 
 
     defaultConfig {
+
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -20,6 +21,12 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+    }
+
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 
     dataBinding {
@@ -31,21 +38,28 @@ android {
     }
 
 
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
-    }
-
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    sourceSets{
+        main{
+            manifest.srcFile 'src/main/AndroidLibManifest.xml'
         }
     }
 
 
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "RUN_AS_APP", "${runAsApp}"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
 
+        release {
+            buildConfigField "boolean", "RUN_AS_APP", "${runAsApp}"
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
 dependencies {
@@ -55,13 +69,14 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$rootProject.ext.androidSupportTestVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoCoreVersion"
 
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.ext.kotlinVersion"
+    compileOnly project(':base')
+
+    compileOnly"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.ext.kotlinVersion"
 
     compileOnly "com.android.support:appcompat-v7:$rootProject.ext.androidSupportVersion"
     compileOnly "com.android.support:support-annotations:$rootProject.ext.androidSupportVersion"
     compileOnly "com.android.support:support-v4:$rootProject.ext.androidSupportVersion"
     compileOnly "com.android.support:design:$rootProject.ext.androidSupportVersion"
 
-    compileOnly "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintVersion"
-
 }
+
