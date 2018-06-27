@@ -21,6 +21,6 @@ project.ext {
 }
 
 project.ext {
-    applicationId = 'com.cnyanglao.cloudvideo'
+    applicationId = 'com.jarvanmo.modular'
 }
 
