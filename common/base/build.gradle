@@ -4,7 +4,7 @@ apply from: '../../scripts/library.gradle'
 dependencies {
     api project(':resources')
     api project(':database')
-    api project(':network')
+    api project(':http')
 
     api 'com.orhanobut:logger:2.2.0'
 
