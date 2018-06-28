@@ -42,17 +42,17 @@ android {
     signingConfigs {
 
         debugConfig {
-            storeFile file("${rootProject.getRootDir().getAbsolutePath()}/store/cloudvideo.jks")
-            storePassword "123456"
-            keyAlias "老年云课堂"
-            keyPassword "123456"
+            storeFile file("${rootProject.getRootDir().getAbsolutePath()}/store/storeFile.jks")
+            storePassword "storePassword"
+            keyAlias "keyAlias"
+            keyPassword "keyPassword"
         }
 
         releaseConfig {
-            storeFile file("${rootProject.getRootDir().getAbsolutePath()}/store/cloudvideo.jks")
-            storePassword "123456"
-            keyAlias "老年云课堂"
-            keyPassword "123456"
+            storeFile file("${rootProject.getRootDir().getAbsolutePath()}/store/storeFile.jks")
+            storePassword "storePassword"
+            keyAlias "keyAlias"
+            keyPassword "keyPassword"
         }
 
     }
