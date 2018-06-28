@@ -18,7 +18,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode getVersionCode(false)
-        versionName getVersionName(true)
+        versionName getVersionName(false)
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
